@@ -12,7 +12,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject lobbypanel;
     public GameObject roompanel;
     public Text roomName;
-    
+
+    public RoomItem roomItemPrefab;
+    List<RoomItem> roomItemList = new List<RoomItem>();
+    public Transform contentObject;
 
     // Start is called before the first frame update
     void Start()
@@ -33,5 +36,34 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         lobbypanel.SetActive(false);
         roompanel.SetActive(true);
         roomName.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name;
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) //Get Room Updates from Photon Server and Update the in game list accordingly
+    {
+        UpdateRoomList(roomList);
+    }
+
+    public void UpdateRoomList(List<RoomInfo> list)
+    {
+
+        //Clear the current existing list
+        foreach (RoomItem item in roomItemList)
+        {
+            Destroy(item.gameObject);
+        }
+        roomItemList.Clear();
+
+        //Create a new list with existing rooms and newly added rooms
+        foreach(RoomInfo room in list)
+        {
+            RoomItem newRoom = Instantiate(roomItemPrefab, contentObject);
+            newRoom.SetRoomName(room.Name);
+            roomItemList.Add(newRoom);
+        }
+    }
+
+    public void JoinRoom(string roomName)
+    {
+        PhotonNetwork.JoinRoom(roomName);
     }
 }
