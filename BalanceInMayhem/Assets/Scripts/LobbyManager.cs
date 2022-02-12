@@ -17,6 +17,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     List<RoomItem> roomItemList = new List<RoomItem>();
     public Transform contentObject;
 
+    public float timeBetweenUpdates = 1.5f;
+    float nextUpdateTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,10 +43,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) //Get Room Updates from Photon Server and Update the in game list accordingly
     {
-        UpdateRoomList(roomList);
+        if(Time.time >= nextUpdateTime)
+        {
+            UpdateRoomList(roomList);
+            nextUpdateTime = Time.time + timeBetweenUpdates; //Set a cooldown time of 1.5 sec between each update
+        }
+
     }
 
-    public void UpdateRoomList(List<RoomInfo> list)
+    public void UpdateRoomList(List<RoomInfo> list) //Update the lobby room list
     {
 
         //Clear the current existing list
@@ -62,8 +70,26 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void JoinRoom(string roomName)
+    public void JoinRoom(string roomName) //Join the room that has the same name on button text
     {
         PhotonNetwork.JoinRoom(roomName);
     }
+
+    public void OnClickLeaveRoom() //Leave the current room
+    {
+        PhotonNetwork.LeaveRoom();
+
+    }
+
+    public override void OnLeftRoom()//When leaving the room, switch panels
+    {
+        roompanel.SetActive(false);
+        lobbypanel.SetActive(true);
+    }
+
+    public override void OnConnectedToMaster() //This is called here to refresh the lobby room list correctly after leaving the room.
+    {
+        PhotonNetwork.JoinLobby();
+    }
+
 }
