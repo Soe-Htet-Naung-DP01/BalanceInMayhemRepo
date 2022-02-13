@@ -20,6 +20,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public float timeBetweenUpdates = 1.5f;
     float nextUpdateTime;
 
+    public List<PlayerItem> playerItemList = new List<PlayerItem>();
+    public PlayerItem playerItemPrefab;
+    public Transform playerItemParent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +43,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         lobbypanel.SetActive(false);
         roompanel.SetActive(true);
         roomName.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name;
+        UpdatePlayerList();
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) //Get Room Updates from Photon Server and Update the in game list accordingly
@@ -87,9 +92,42 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         lobbypanel.SetActive(true);
     }
 
-    public override void OnConnectedToMaster() //This is called here to refresh the lobby room list correctly after leaving the room.
+    public override void OnConnectedToMaster() //This is called here to rejoin the lobby successfully after leaving the room.
     {
         PhotonNetwork.JoinLobby();
     }
 
+    public void UpdatePlayerList()
+    {
+
+        //Delete All the existing items in player item list
+        foreach (PlayerItem item in playerItemList)
+        {
+            Destroy(item.gameObject);
+        }
+        playerItemList.Clear();
+
+        //check if the room still exists
+        if(PhotonNetwork.CurrentRoom == null)
+        {
+            return;
+        }
+        //Recreate the existing ones and the new ones
+        foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+        {
+            PlayerItem newPlayerItem = Instantiate(playerItemPrefab, playerItemParent);
+            playerItemList.Add(newPlayerItem);
+        }
+
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer) //when new player enters the current room
+    {
+        UpdatePlayerList();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer) //when the existing player(s) left the current room
+    {
+        UpdatePlayerList();
+    }
 }
