@@ -24,6 +24,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public PlayerItem playerItemPrefab;
     public Transform playerItemParent;
 
+    public GameObject playButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +36,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if(lobbyNameInput.text.Length >= 1) //if room name for lobby isn't blank
         {
-            PhotonNetwork.CreateRoom(lobbyNameInput.text, new RoomOptions() {  MaxPlayers =  2} ); //create room with max 2 players to join
+            PhotonNetwork.CreateRoom(lobbyNameInput.text, new RoomOptions() {  MaxPlayers =  2, BroadcastPropsChangeToAll = true} ); //create room with max 2 players to join
         }
     }
 
@@ -117,6 +119,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             PlayerItem newPlayerItem = Instantiate(playerItemPrefab, playerItemParent);
             newPlayerItem.SetPlayerInfo(player.Value);
+
+            if (player.Value == PhotonNetwork.LocalPlayer)
+            {
+                newPlayerItem.ApplyLocalChanges();
+            }
+
             playerItemList.Add(newPlayerItem);
         }
 
@@ -130,5 +138,22 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer) //when the existing player(s) left the current room
     {
         UpdatePlayerList();
+    }
+
+    private void Update()
+    {
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            playButton.SetActive(true);
+        }
+        else
+        {
+            playButton.SetActive(false);
+        }
+    }
+
+    public void OnClickPlayButton()
+    {
+        PhotonNetwork.LoadLevel("Game");
     }
 }

@@ -17,6 +17,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.NickName = usernameInput.text; //Get Nickname
             buttonText.text = "Connecting...";
+            PhotonNetwork.AutomaticallySyncScene = true; //Auto Sync Scenes of the players in Same Lobby, so that no one gets left beind.
             PhotonNetwork.ConnectUsingSettings(); //Photon's built in function to connect to photon server.
         }
         else //if username is blank
