@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 100834337591639846}
   - component: {fileID: 5423689227003180168}
   - component: {fileID: 9186557388694678371}
+  - component: {fileID: 666117092490856216}
   m_Layer: 0
   m_Name: Meshroll
   m_TagString: Untagged
@@ -269,6 +270,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5423689227003180168}
+  - {fileID: 666117092490856216}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -317,7 +319,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1f567782192aa4ba2349cde1dc189b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 5
+--- !u!114 &666117092490856216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100834337591639842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 1
+    Name: isWalking
+  - Type: 4
+    SynchronizeType: 1
+    Name: isTakingDmg
+  - Type: 4
+    SynchronizeType: 1
+    Name: isDead
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &100834338117999672
 GameObject:
   m_ObjectHideFlags: 0

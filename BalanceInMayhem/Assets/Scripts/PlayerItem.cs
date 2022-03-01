@@ -74,6 +74,7 @@ public class PlayerItem : MonoBehaviourPunCallbacks
         }
         else
         {
+            playerAvatar.sprite = playableChars[0];
             playerProperties["playerAvatar"] = 0;
         }
     }
