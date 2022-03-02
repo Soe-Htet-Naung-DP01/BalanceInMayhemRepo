@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float dashTime;
     float resetSpeed;
 
+    public float minX, maxX, minY, maxY;
+
     Animator anim;
     PhotonView view;
     Health healthScript;
@@ -28,14 +30,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(view.IsMine)
+
+        if (view.IsMine)
         {
             //movement
             //PC Controls
             Vector2 movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             Vector2 moveDistance = movementInput.normalized * speed * Time.deltaTime;
             transform.position += (Vector3)moveDistance;
-            
+
+            //If player goes out of bound
+            Wrap();
+
             //dash
             //PC Controls
             if (Input.GetKeyDown(KeyCode.Space) && movementInput != Vector2.zero)
@@ -67,6 +73,30 @@ public class PlayerController : MonoBehaviour
         speed = dashSpeed;
         yield return new WaitForSeconds(dashTime);
         speed = resetSpeed;
+    }
+
+    void Wrap()
+    {
+        if (transform.position.x < minX)
+        {
+            //Put a particle effect here
+            transform.position = new Vector2(maxX, transform.position.y);
+        }
+        if (transform.position.x > maxX)
+        {
+            //Put a particle effect here
+            transform.position = new Vector2(minX, transform.position.y);
+        }
+        if (transform.position.y < minY)
+        {
+            //Put a particle effect here
+            transform.position = new Vector2(transform.position.x, maxY);
+        }
+        if (transform.position.y > maxY)
+        {
+            //Put a particle effect here
+            transform.position = new Vector2(transform.position.x, minY);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
