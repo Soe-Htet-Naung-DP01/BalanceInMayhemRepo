@@ -10,11 +10,14 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     PhotonView view;
     Health healthScript;
+
+    LineRenderer line;
     private void Start()
     {
         view = GetComponent<PhotonView>();
         anim = GetComponent<Animator>();
         healthScript = FindObjectOfType<Health>();
+        line = FindObjectOfType<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -37,6 +40,11 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("isWalking", true);
             }
 
+            line.SetPosition(0, transform.position);
+        }
+        else
+        {
+            line.SetPosition(1, transform.position);
         }
         
     }
