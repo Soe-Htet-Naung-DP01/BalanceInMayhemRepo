@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 4773672607622684276}
   - component: {fileID: 4773672607622684171}
   - component: {fileID: 8868967351170859626}
+  - component: {fileID: 602689868498111203}
   m_Layer: 0
   m_Name: FireSpiritEnemy
   m_TagString: Untagged
@@ -268,6 +269,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &602689868498111203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4773672607622684278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd36a74b1cf1a34985f22f1ec70819a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2.5
 --- !u!1 &4773672608028888838
 GameObject:
   m_ObjectHideFlags: 0

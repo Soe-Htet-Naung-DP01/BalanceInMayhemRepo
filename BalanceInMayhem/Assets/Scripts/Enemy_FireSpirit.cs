@@ -32,5 +32,10 @@ public class Enemy_FireSpirit : MonoBehaviour
             nearestPlayer = players[0]; //Otherwise, nearest player is Player One
         }
 
+        if(nearestPlayer != null)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, nearestPlayer.transform.position, speed * Time.deltaTime);
+        }
+
     }
 }
