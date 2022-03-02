@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
 {
 
     public float speed;
+    public float dashSpeed;
+    public float dashTime;
+    float resetSpeed;
+
     Animator anim;
     PhotonView view;
     Health healthScript;
@@ -14,6 +18,7 @@ public class PlayerController : MonoBehaviour
     LineRenderer line;
     private void Start()
     {
+        resetSpeed = speed;
         view = GetComponent<PhotonView>();
         anim = GetComponent<Animator>();
         healthScript = FindObjectOfType<Health>();
@@ -26,10 +31,18 @@ public class PlayerController : MonoBehaviour
         if(view.IsMine)
         {
             //movement
+            //PC Controls
             Vector2 movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             Vector2 moveDistance = movementInput.normalized * speed * Time.deltaTime;
             transform.position += (Vector3)moveDistance;
             
+            //dash
+            //PC Controls
+            if (Input.GetKeyDown(KeyCode.Space) && movementInput != Vector2.zero)
+            {
+                StartCoroutine(Dash());
+            }
+
             //animation
             if(movementInput == Vector2.zero)
             {
@@ -47,6 +60,13 @@ public class PlayerController : MonoBehaviour
             line.SetPosition(1, transform.position);
         }
         
+    }
+
+    IEnumerator Dash()
+    {
+        speed = dashSpeed;
+        yield return new WaitForSeconds(dashTime);
+        speed = resetSpeed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

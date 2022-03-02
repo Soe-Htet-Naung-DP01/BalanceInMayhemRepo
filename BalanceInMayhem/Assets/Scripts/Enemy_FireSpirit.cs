@@ -8,12 +8,14 @@ public class Enemy_FireSpirit : MonoBehaviour
     PlayerController[] players;
     PlayerController nearestPlayer;
     public float speed;
+    Score scoreScript;
     Animator anim;
     float deathTimer;
     // Start is called before the first frame update
     void Start()
     {
         players = FindObjectsOfType<PlayerController>();
+        scoreScript = FindObjectOfType<Score>();
         anim = GetComponent<Animator>();
     }
 
@@ -38,20 +40,23 @@ public class Enemy_FireSpirit : MonoBehaviour
         if(nearestPlayer != null)
         {
             transform.position = Vector2.MoveTowards(transform.position, nearestPlayer.transform.position, speed * Time.deltaTime);
+            anim.SetBool("isAttacking", true);
         }
 
-        //if gotten close to the nearest player, do the animation
-
-        
     }
     //if came into contact with the edge of the line, die
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "TheLine")
+        if(PhotonNetwork.IsMasterClient)
         {
-            //anim.SetBool("isDead", true);
-            PhotonNetwork.Destroy(this.gameObject);
+            if (collision.tag == "TheLine")
+            {
+                //anim.SetBool("isDead", true);
+                scoreScript.UpdateScore();
+                PhotonNetwork.Destroy(this.gameObject);
+            }
         }
+        
     }
 
 }
